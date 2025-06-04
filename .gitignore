@@ -1,0 +1,6 @@
+# Ignore Terraform files
+*.tf
+terraform.tfvars
+
+# Ignore environment files
+.env
