@@ -13,15 +13,20 @@ stages:
   - job: Deploy
     pool:
       vmImage: 'ubuntu-latest'
-    steps:
-    - task: HelmDeploy@0
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'node-api-cluster-connection'
-        namespace: 'default'
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: '$(helmChart)'
-        releaseName: 'node-api'
-        overrideValues: 'image.tag=$(imageTag)'
-        valueFile: '$(helmChart)/values.yaml'
+# deploy-aks.yml (FIXED VERSION)
+steps:
+- task: HelmDeploy@0
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceEndpoint: 'node-api-cluster-connection'
+    namespace: 'default'
+    command: 'upgrade'
+    # ADD INSTALL COMMAND FOR NEW DEPLOYMENTS
+    arguments: '--install'
+    chartType: 'FilePath'
+    chartPath: '$(helmChart)'
+    releaseName: 'node-api'
+    # FIX VALUES OVERRIDE
+    overrideValues: 'image.tag=$(imageTag)'
+    # ADD VALUE FILE REFERENCE
+    valueFile: '$(helmChart)/values.yaml'
