@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - azurelocal
+
+variables:
+  acrName: 'myimagerepo.azurecr.io'
+  imageName: 'node-api'
+
+stages:
+- stage: Build
+  jobs:
+  - job: BuildPush
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      inputs:
+        command: buildAndPush
+        repository: $(imageName)
+        dockerfile: '**/Dockerfile'
+        containerRegistry: 'myimagerepo-acr'  # Service connection name
+        tags: |
+          $(Build.BuildId)
+          latest
