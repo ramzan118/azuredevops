@@ -1,0 +1,11 @@
+replicaCount: 2
+image:
+  repository: myimagerepo.azurecr.io/node-api  # ACR repository
+  tag: latest
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+env:
+  MONGO_URI: "mongodb+srv://clouddevops679:8lbzbffdAFL6bq6N@cluster0.3moq5vg.mongodb.net/?retryWrites=true&w=majority"
+  PORT: 3000

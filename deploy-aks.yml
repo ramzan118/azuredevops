@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+      - azureprod
+
+variables:
+  helmChart: 'node-api-chart'
+  imageTag: '$(Build.BuildId)'
+
+stages:
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: HelmDeploy@0
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'node-api-cluster-connection'
+        namespace: 'default'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(helmChart)'
+        releaseName: 'node-api'
+        overrideValues: 'image.tag=$(imageTag)'
+        valueFile: '$(helmChart)/values.yaml'
